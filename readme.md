@@ -17,7 +17,7 @@ Primary Key: Transaction ID
 + EXIST
 
 ```sqlite
--- Output whether such record exist.
+-- Output whether such record exists.
 SELECT EXIST(column) FROM table_name WHERE predicates
 ```
 
