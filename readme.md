@@ -6,7 +6,7 @@ Mock database for transaction record retrieval and aggregation from multiple bro
 
 ### Schema
 
-Transaction ID| UserID | Sector Name | Asset Name | Asset Type | Volume | Volume for buy | Volume for sell | Price | Price for buy | Price for sell | is_buy | Date
+Transaction ID | UserID | Sector Name | Asset Name | Asset Type | Volume | Volume for buy | Volume for sell | Price | Price for buy | Price for sell | is_buy | Date
 
 Primary Key: Transaction ID
 
