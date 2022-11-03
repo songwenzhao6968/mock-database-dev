@@ -16,3 +16,7 @@ add_executable(mockdb_client
         src/provider.cpp
         src/client.cpp
         )
+
+add_executable(data_maker
+        src/data_maker.cpp
+        )

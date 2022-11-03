@@ -70,7 +70,7 @@ std::string exec_SQL(Servers& s, std::string SQL) {
 
 void start_interactive_client(json config) {
     Servers servers(config); // json config file is for initiating the server/providers
-    /*std::cout << "Start Interactive Mode" << std::endl;
+    std::cout << "Start Interactive Mode" << std::endl;
     std::string command;
     std::cout << "> ";
     while (std::getline(std::cin, command)) {
@@ -84,7 +84,7 @@ void start_interactive_client(json config) {
         }
         std::string result = exec_SQL(servers, command);
         std::cout << result << std::endl << std::endl << "> ";
-    }*/
+    }
 }
 
 void process_batch_sql(json config, std::istream& fin) {

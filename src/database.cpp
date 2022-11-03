@@ -56,11 +56,22 @@ std::string StrField::as_string() {
     return ss.str();
 }
 
+BoolField::BoolField(bool v, DataType t) : value(v), Field(t) {}
+
+BoolField::BoolField(bool v) : value(v), Field(BOOL) {}
+
+void BoolField::set(bool v) { this->value = v; }
+
+bool BoolField::get() const { return this->value; }
+
+std::string BoolField::as_string() {
+    return value?"true":"false";
+}
+
 Schema::Schema(json &j) {
     static std::unordered_map<std::string, DataType> s_to_t{
             {"str",    STR},
             {"bool", BOOL},
-            {"char", CHAR},
             {"uint8",  UINT8},
             {"uint32", UINT32},
             {"int16",  INT16},
@@ -94,7 +105,8 @@ Record::Record(const Schema &s, json &j) : table(nullptr) {
                 f = new StrField(j_cur.get<std::string>());
                 break;
             case BOOL:
-                f = new 
+                f = new BoolField(j_cur.get<bool>());
+                break;
             case UINT8:
                 f = new UintField(j_cur.get<uint>(), UINT8);
                 break;
@@ -103,6 +115,9 @@ Record::Record(const Schema &s, json &j) : table(nullptr) {
                 break;
             case INT16:
                 f = new IntField(j_cur.get<int>(), INT16);
+                break;
+            case INT32:
+                f = new IntField(j_cur.get<int>(), INT32);
                 break;
             default:
                 break;
@@ -120,11 +135,15 @@ Record::Record(const Record &rhs) : table(rhs.table) {
             case STR:
                 f = new StrField(static_cast<StrField *>(f_rhs)->get());
                 break;
+            case BOOL:
+                f = new BoolField(static_cast<BoolField *>(f_rhs)->get());
+                break;
             case UINT8:
             case UINT32:
                 f = new UintField(static_cast<UintField *>(f_rhs)->get(), f_rhs->type);
                 break;
             case INT16:
+            case INT32:
                 f = new IntField(static_cast<UintField *>(f_rhs)->get(), f_rhs->type);
                 break;
             default:
@@ -166,11 +185,8 @@ Table::Table(json &j) : database(nullptr), schema(new Schema(j["schema"])) {
     size_t limit = 0x7fffffff;
     if (j.contains("limit")) limit = j["limit"].get<size_t>();
     for (auto &j_r: j["data"]) {
-        std::cout<<"yes."<<std::endl;
-        //this->insert(Record(*schema, j_r));
-        Record R(*schema, j_r);
+        this->insert(Record(*schema, j_r));
         if (size() >= limit) break;
-        exit(0);
     }
 }
 
@@ -207,6 +223,10 @@ bool Predicate::check(const Record &r) const {
                 std::string lhs = static_cast<StrField *>(f)->get();
                 return column_string_values.find(lhs) != column_string_values.end();
             }
+            case BOOL: {
+                bool lhs = static_cast<BoolField *>(f)->get();
+                return column_bool_values.find(lhs) != column_bool_values.end();
+            }
             case UINT8:
             case UINT32: {
                 uint lhs = static_cast<UintField *>(f)->get();
@@ -238,8 +258,21 @@ bool Predicate::check(const Record &r) const {
                     throw "Unsupported predicate for StrField";
             }
         }
+        case BOOL: {
+            bool lhs = static_cast<BoolField *>(f)->get();
+            bool rhs = value=="true"?true:false;
+            switch (type) {
+                case P_EQ:
+                    return lhs == rhs;
+                case P_NE:
+                    return lhs != rhs;
+                default:
+                    throw "Unsupported predicate for BoolField";
+            }
+        }
         case UINT8:
         case UINT32: {
+            //std::cout<<"yes."<<std::endl;
             uint lhs = static_cast<UintField *>(f)->get();
             uint rhs = std::stoul(value);
             switch (type) {
@@ -324,8 +357,7 @@ bool Query::isRetrieval() const {
 
 Query::Query(std::string SQL) {
     if (use_antlr) {
-        std::cerr << "ERROR: antlr not supported." << std::endl;
-        exit(0);
+        throw "Antlr is not working";
     } else {
         // 1. separate different parts
         SQL = replace_all(SQL, "\\(", " ( ");

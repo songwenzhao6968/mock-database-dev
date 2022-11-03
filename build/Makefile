@@ -129,6 +129,19 @@ mockdb_client/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mockdb_client.dir/build.make CMakeFiles/mockdb_client.dir/build
 .PHONY : mockdb_client/fast
 
+#=============================================================================
+# Target rules for targets named data_maker
+
+# Build rule for target.
+data_maker: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 data_maker
+.PHONY : data_maker
+
+# fast build rule for target.
+data_maker/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/data_maker.dir/build.make CMakeFiles/data_maker.dir/build
+.PHONY : data_maker/fast
+
 src/client.o: src/client.cpp.o
 .PHONY : src/client.o
 
@@ -152,6 +165,30 @@ src/client.s: src/client.cpp.s
 src/client.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mockdb_client.dir/build.make CMakeFiles/mockdb_client.dir/src/client.cpp.s
 .PHONY : src/client.cpp.s
+
+src/data_maker.o: src/data_maker.cpp.o
+.PHONY : src/data_maker.o
+
+# target to build an object file
+src/data_maker.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/data_maker.dir/build.make CMakeFiles/data_maker.dir/src/data_maker.cpp.o
+.PHONY : src/data_maker.cpp.o
+
+src/data_maker.i: src/data_maker.cpp.i
+.PHONY : src/data_maker.i
+
+# target to preprocess a source file
+src/data_maker.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/data_maker.dir/build.make CMakeFiles/data_maker.dir/src/data_maker.cpp.i
+.PHONY : src/data_maker.cpp.i
+
+src/data_maker.s: src/data_maker.cpp.s
+.PHONY : src/data_maker.s
+
+# target to generate assembly for a file
+src/data_maker.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/data_maker.dir/build.make CMakeFiles/data_maker.dir/src/data_maker.cpp.s
+.PHONY : src/data_maker.cpp.s
 
 src/database.o: src/database.cpp.o
 .PHONY : src/database.o
@@ -233,10 +270,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... data_maker"
 	@echo "... mockdb_client"
 	@echo "... src/client.o"
 	@echo "... src/client.i"
 	@echo "... src/client.s"
+	@echo "... src/data_maker.o"
+	@echo "... src/data_maker.i"
+	@echo "... src/data_maker.s"
 	@echo "... src/database.o"
 	@echo "... src/database.i"
 	@echo "... src/database.s"

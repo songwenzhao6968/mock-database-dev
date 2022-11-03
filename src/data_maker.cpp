@@ -130,5 +130,6 @@ int main(int argc, char* argv[]) {
 	ofstream fout("../example/data/server/db.json");
 	fout << head << data << tail;
 	fout.close();
+	cout << "FINISHED: 1 table with 60 records created.";
 	return 0;
 }

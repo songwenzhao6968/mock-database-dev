@@ -70,6 +70,16 @@ public:
     std::string as_string();
 };
 
+class BoolField:public Field {
+    bool value;
+public:
+    BoolField(bool v);
+    BoolField(bool v, DataType t);
+    bool get() const;
+    void set(bool v);
+    std::string as_string() override;
+};
+
 class Table;
 
 class Record {
@@ -119,6 +129,7 @@ public:
     std::unordered_set<std::string> column_string_values; // for in-operation
     std::unordered_set<int> column_int_values;
     std::unordered_set<uint> column_uint_values;
+    std::unordered_set<bool> column_bool_values;
     std::string value; // value to compare with <concerned_column>
     size_t p_l;
     size_t p_r;
