@@ -24,14 +24,14 @@ SELECT EXIST(column) FROM table_name WHERE predicates
 + AVG_CLOSING_PRICE
 
 ```sqlite
--- Output the sum of abs(Price) divided by the sum of abs(Volume) 
+-- Output the sum of abs(Price) divided by the sum of abs(Volume).
 SELECT AVG_CLOSING_PRICE(*) FROM table_name WHERE predicates
 ```
 
 + COUNT_UNIQUE
 
 ```sqlite
--- Output the number of unique values in that column
+-- Output the number of unique values in that column.
 SELECT COUNT_UNIQUE(column) FROM table_name WHERE predicates
 ```
 
