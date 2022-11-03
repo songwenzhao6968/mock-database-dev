@@ -1,0 +1,18 @@
+{
+    "tables": [
+        {
+            "name": "t_transaction",
+            "schema": "../example/data/client/db.json",
+            "providers": ["Broker_A"]
+        }
+    ],
+    "servers": {
+        "Broker_A": {
+            "type": "local",
+            "local_config": {
+                "config_file_loc": "../example/data/config.json",
+                "database_file_loc": "../example/data/server/db.json"
+            }
+        }
+    }
+}
