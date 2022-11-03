@@ -33,4 +33,3 @@ int main(int argc, char* argv[]) {
     config_json_fstream.close();
     return 0;
 }
-//./mockdb_client ../example/data/config.json
