@@ -9,6 +9,7 @@
 #include <cctype>
 #include <cassert>
 #include <sstream>
+#include <unordered_set>
 
 #include "database.h"
 
@@ -669,8 +670,73 @@ std::string Database::runQuery(const Query &q) {
             ss << "AGG\n" << (_sum[2]+_sum[3])/(_sum[0]+_sum[1]) << "\n";
             return ss.str();
         }
-        default:
+        case Q_AGGREGATE_CNT_UNQ: {
+            long long _cnt = 0;
+            assert(q.concerned_columns.size() == 1);
+            const std::string &concerned_column = q.concerned_columns.at(0);
+            size_t col_idx = tables.at(q.concerned_table)->schema->find_column_by_name(concerned_column);
+            DataType d_type = tables.at(q.concerned_table)->schema->columns.at(col_idx).second;
+            switch (d_type) {
+                case STR: {
+                    std::unordered_set<std::string> _unq;
+                    for (auto &r: tables.at(q.concerned_table)->records) {
+                        if (q.filter(r)) {
+                            Field *f = r.fields.at(col_idx);
+                            std::string value = static_cast<StrField *>(f)->get();
+                            _unq.insert(value);
+                        }
+                    }
+                    _cnt = _unq.size();
+                    break;
+                }
+                case BOOL: {
+                    std::unordered_set<bool> _unq;
+                    for (auto &r: tables.at(q.concerned_table)->records) {
+                        if (q.filter(r)) {
+                            Field *f = r.fields.at(col_idx);
+                            bool value = static_cast<BoolField *>(f)->get();
+                            _unq.insert(value);
+                        }
+                    }
+                    _cnt = _unq.size();
+                    break;
+                }
+                case UINT8:
+                case UINT32: {
+                    std::unordered_set<uint> _unq;
+                    for (auto &r: tables.at(q.concerned_table)->records) {
+                        if (q.filter(r)) {
+                            Field *f = r.fields.at(col_idx);
+                            uint value = static_cast<UintField *>(f)->get();
+                            _unq.insert(value);
+                        }
+                    }
+                    _cnt = _unq.size();
+                    break;
+                }
+                case INT16:
+                case INT32: {
+                    std::unordered_set<int> _unq;
+                    for (auto &r: tables.at(q.concerned_table)->records) {
+                        if (q.filter(r)) {
+                            Field *f = r.fields.at(col_idx);
+                            int value = static_cast<IntField *>(f)->get();
+                            _unq.insert(value);
+                        }
+                    }
+                    _cnt = _unq.size();
+                    break;
+                }
+                default:
+                    break;
+            }
+            std::stringstream ss;
+            ss << "AGG\n" << _cnt << "\n";
+            return ss.str();
+        }
+        default:{
             return "ERR\nUNKNOWN QUERY TYPE";
+        }
     }
     return "ERR\nQUERY TYPE NOT SUPPORTED";
 }
