@@ -145,13 +145,15 @@ enum QueryType {
     Q_USE_CONTEXT,
     Q_RETRIEVE,
     Q_AGGREGATE_,
-    Q_AGGREGATE_EXIST,  // not "EXISTS", this is not standard SQL
+    Q_AGGREGATE_EXIST, // not "EXISTS", this is not standard SQL
     Q_AGGREGATE_CNT,
     Q_AGGREGATE_SUM,
     Q_AGGREGATE_AVG,
     Q_AGGREGATE_MAX,
     Q_AGGREGATE_MIN,
-    Q_AGGREGATE__,
+    Q_AGGREGATE_AVG_CP, // this is not standard SQL
+    Q_AGGREGATE_CNT_UNQ, // this is not standard SQL
+    Q_AGGREGATE__
 };
 
 class Query {

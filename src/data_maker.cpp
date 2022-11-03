@@ -99,7 +99,7 @@ string outBool(bool x){
 }
 
 int main(int argc, char* argv[]) {
-	int n = 60, m = 15; // n: the number of transactions m: the number of users
+	int n = 200, m = 15; // n: the number of transactions m: the number of users
 	random_device rd;
 	default_random_engine r{rd()};
 	uniform_int_distribution<int> volume(-1000, 1000);
@@ -130,6 +130,6 @@ int main(int argc, char* argv[]) {
 	ofstream fout("../example/data/server/db.json");
 	fout << head << data << tail;
 	fout.close();
-	cout << "FINISHED: 1 table with 60 records created.";
+	cout << "FINISHED: 1 table with " << n << " records created.";
 	return 0;
 }

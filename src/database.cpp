@@ -425,6 +425,10 @@ Query::Query(std::string SQL) {
                 this->type = Q_AGGREGATE_AVG;
             } else if (_token == "SUM") {
                 this->type = Q_AGGREGATE_SUM;
+            } else if (_token == "AVG_CLOSING_PRICE"){
+                this->type = Q_AGGREGATE_AVG_CP;
+            } else if (_token == "COUNT_UNIQUE"){
+                this->type = Q_AGGREGATE_CNT_UNQ;
             }
         }
         if (this->type == Q_UNKNOWN) this->type = Q_RETRIEVE;
@@ -635,6 +639,34 @@ std::string Database::runQuery(const Query &q) {
                 default:
                     return "ERR\nUNKNOWN AGGREGATION TYPE";
             }
+            return ss.str();
+        }
+        case Q_AGGREGATE_AVG_CP: {
+            long long _sum[4] = {0, 0, 0, 0};
+            assert(q.concerned_columns.size() == 1);
+            assert(q.concerned_columns.at(0) == "*");
+            std::vector<std::string> concerned_columns{"volume_for_buy", "volume_for_sell", "price_for_buy", "price_for_sell"};
+            for (auto &r: tables.at(q.concerned_table)->records) {
+                if (q.filter(r)) {
+                    for (int i = 0; i < 4; ++i) {
+                        size_t col_idx = r.find_column_by_name(concerned_columns.at(i));
+                        Field *f = r.fields.at(col_idx);
+                        assert(f->type > NUM_TYPE_);
+                        assert(f->type < NUM_TYPE__);
+                        if (f->type < UNSIGN_BOUND_) {
+                            int value = static_cast<UintField *>(f)->get();
+                            _sum[i] += value;
+                        } else {
+                            int value = static_cast<IntField *>(f)->get();
+                            _sum[i] += value;
+                        }
+                    }
+                }
+            }
+            if (_sum[0]+_sum[1] == 0)
+                return "ERR\nRECORD NOT EXIST";
+            std::stringstream ss;
+            ss << "AGG\n" << (_sum[2]+_sum[3])/(_sum[0]+_sum[1]) << "\n";
             return ss.str();
         }
         default:

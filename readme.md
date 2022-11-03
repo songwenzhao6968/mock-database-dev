@@ -66,15 +66,15 @@ All tests passed (29 assertions in 10 test cases)
 - Interactive mode
 
 ```shell script
-./mdb_client <JSON configuration file location>
-# example: ./mdb_client ../example/2p_retrieval/data/config.json
+./mockdb_client <JSON configuration file location>
+# example: ./mockdb_client ../example/data/config.json
 ```
 
 - Batch processing mode
 
 ```shell script
-./mdb_client <JSON configuration file location> <SQL file location>
-# example: ./mdb_client ../example/2p_retrieval/data/config.json ../example/2p_retrieval/data/client/query.sql 
+./mockdb_client <JSON configuration file location> <SQL file location>
+# example: ./mockdb_client ../example/data/config.json ../example/data/client/query.sql
 ```
 
 ## Example
